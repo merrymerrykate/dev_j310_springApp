@@ -1,6 +1,7 @@
 package com.example.dev_j310_springapp.service.impl;
 
 import com.example.dev_j310_springapp.common.dto.AddressDto;
+import com.example.dev_j310_springapp.common.dto.ClientDto;
 import com.example.dev_j310_springapp.common.entity.AddressEntity;
 import com.example.dev_j310_springapp.common.entity.ClientEntity;
 import com.example.dev_j310_springapp.exception.EAppException;
@@ -50,6 +51,12 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public Stream<AddressDto> findAddressByClientId(Integer id) {
         return addressRepository.findAddressByClientId(id).map(AddressServiceImpl::entityToDto);
+    }
+
+    @Override
+    public Stream<AddressDto> findByAddress(String address, String type) {
+        return addressRepository.findByAddress(address, type).map(AddressServiceImpl::entityToDto);
+
     }
 
     public static AddressDto entityToDto(AddressEntity entity){

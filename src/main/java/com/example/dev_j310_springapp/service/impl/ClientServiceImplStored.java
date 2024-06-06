@@ -76,7 +76,8 @@ public class ClientServiceImplStored implements ClientService {
     }
 
     @Override
-    public Optional <ClientDto> create(ClientDto clientDto){
+    //public Optional <ClientDto> create(ClientDto clientDto){
+    public Optional<ClientDto> create(ClientDto clientDto){
         clients.stream().max(Comparator.comparing(ClientDto::getClientid))
                 .map(ClientDto::getClientid)
                 .ifPresent(e -> {
@@ -84,10 +85,11 @@ public class ClientServiceImplStored implements ClientService {
                     clients.add(clientDto);
                 });
         return findClientById(clientDto.getClientid());
+        //return null;
     }
 
     @Override
-    public Stream<ClientDto> findByClientName(String clientname) {
+    public Stream<ClientDto> findByClientName(String clientname, String clientType) {
         return null;
     }
 }

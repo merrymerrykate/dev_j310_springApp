@@ -1,5 +1,6 @@
 package com.example.dev_j310_springapp.repo.impl;
 
+import com.example.dev_j310_springapp.common.dto.ClientType;
 import com.example.dev_j310_springapp.common.entity.ClientEntity;
 import com.example.dev_j310_springapp.exception.EAppException;
 import com.example.dev_j310_springapp.repo.ClientRepository;
@@ -35,40 +36,26 @@ public class ClientRepositoryImpl implements ClientRepository{
         return client;
     }
 
-    public Stream<ClientEntity> findByClientName(String clientname){
+    public Stream<ClientEntity> findByClientName(String clientname, String clientType) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery <ClientEntity> cq = cb.createQuery(ClientEntity.class);
+        CriteriaQuery<ClientEntity> cq = cb.createQuery(ClientEntity.class);
         Root<ClientEntity> root = cq.from(ClientEntity.class);
-        cq.select(root).where(
-                cb.like(root.get("clientName"), '%'+clientname+'%'));
-        return em.createQuery(cq).getResultList().stream();
+        if (clientType != null && !clientType.isEmpty()) {
+            cq.select(root).where(
+                    cb.and(
+                            cb.like(root.get("clientName"), "%" + clientname + "%"),
+                            cb.like(root.get("type"), ClientType.getClientType(clientType).getType())
+
+                    ));
+        } else {
+            cq.select(root).where(
+                    cb.like(root.get("clientName"), "%" + clientname + "%")
+            );
+        }
+            return em.createQuery(cq).getResultList().stream();
+
+
     }
-//    @Override
-//    public Stream<ClientEntity> findAll() {
-//        return em.createNativeQuery("select * from Client", ClientEntity.class).getResultList().stream();
-//    }
-
-
-
-//    @Override
-//    @Transactional
-//    public void remove(Integer id) throws EAppException {
-//        findById(ClientEntity.class, id).ifPresent(client -> em.remove(client));
-//    }
-
-//    @Override
-//    @Transactional
-//    public void update(ClientEntity clientEntity) throws EAppException {
-//        em.merge(clientEntity);
-//        em.flush();
-//    }
-//
-//    @Override
-//    @Transactional
-//    public Optional<ClientEntity> create(ClientEntity clientEntity) {
-//        em.persist(clientEntity);
-//        return Optional.of(clientEntity);
-//    }
 
     @Override
     public EntityManager getEm(){

@@ -15,5 +15,6 @@ public interface AddressService {
     Optional <AddressDto> create(AddressDto addressDto);
 
     Stream<AddressDto> findAddressByClientId(Integer id);
+    Stream<AddressDto> findByAddress(String address, String type);
 
 }

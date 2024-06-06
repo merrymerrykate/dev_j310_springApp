@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Client</title>
+</head>
+<body>
+<div align="center">
+    <h1>Create New Client</h1>
+    <form th:action="@{/clients/create}" th:object="${clientAddressDto}" method="post">
+        <div th:if="${#fields.hasErrors('clientName')}" th:errors="*{clientName}">Client Name Error</div>
+        <label for="clientName">Client Name:</label>
+        <input type="text" id="clientName" th:field="*{clientName}" required>
+        <br>
+
+        <div th:if="${#fields.hasErrors('type')}" th:errors="*{type}">Client Type Error</div>
+        <label for="clientType">Client Type:</label>
+        <select id="clientType" th:field="*{type}" required>
+            <option value="" disabled selected>Select type</option>
+            <option value="INDIVIDUAL">Individual</option>
+            <option value="LEGAL">Legal</option>
+        </select>
+        <br>
+
+        <div th:if="${#fields.hasErrors('ip')}" th:errors="*{ip}">IP Address Error</div>
+        <label for="ip">IP:</label>
+        <input type="text" id="ip" th:field="*{ip}" required>
+        <br>
+
+        <div th:if="${#fields.hasErrors('mac')}" th:errors="*{mac}">MAC Address Error</div>
+        <label for="mac">MAC:</label>
+        <input type="text" id="mac" th:field="*{mac}" required>
+        <br>
+
+        <div th:if="${#fields.hasErrors('model')}" th:errors="*{model}">Device Model Error</div>
+        <label for="model">Device Model:</label>
+        <input type="text" id="model" th:field="*{model}" required>
+        <br>
+
+        <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Device Location Error</div>
+        <label for="address">Device Location:</label>
+        <input type="text" id="address" th:field="*{address}" required>
+        <br>
+
+        <button type="submit">Create</button>
+    </form>
+    <a th:href="@{/clients}">Back to Clients</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Client</title>
+</head>
+<body>
+<div align="center">
+  <h1>Update Client</h1>
+  <form th:action="@{/client-address-update/update/{clientId}(clientId=${clientDto.clientid})}" th:object="${clientDto}" method="post">
+    <input type="hidden" th:field="*{clientid}">
+    <input type="hidden" th:field="*{added}">
+    <div th:if="${#fields.hasErrors('clientName')}" th:errors="*{clientName}">Client Name Error</div>
+    <label for="clientName">Client Name:</label>
+    <input type="text" id="clientName" th:field="*{clientName}" required>
+    <br>
+
+    <div th:if="${#fields.hasErrors('type')}" th:errors="*{type}">Client Type Error</div>
+    <label for="clientType">Client Type:</label>
+    <select id="clientType" th:field="*{type}" required>
+      <option value="" disabled>Select type</option>
+      <option value="INDIVIDUAL">Individual</option>
+      <option value="LEGAL">Legal</option>
+    </select>
+    <br>
+    <button type="submit">Update</button>
+  </form>
+  <a th:href="@{/clients}">Back to Clients</a>
+</div>
+</body>
+</html>

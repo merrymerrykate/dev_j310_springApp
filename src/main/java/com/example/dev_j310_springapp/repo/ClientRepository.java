@@ -8,11 +8,5 @@ import java.util.stream.Stream;
 
 public interface ClientRepository extends CustomRepository{
 
-//    Stream<ClientEntity> findAll();
-
-//    void remove(Integer id) throws EAppException;
-//    void update(ClientEntity clientEntity) throws EAppException;
-//    Optional <ClientEntity> create(ClientEntity clientEntity);
-
-    Stream<ClientEntity> findByClientName(String firstName);
+    Stream<ClientEntity> findByClientName(String clientname, String clientType);
 }

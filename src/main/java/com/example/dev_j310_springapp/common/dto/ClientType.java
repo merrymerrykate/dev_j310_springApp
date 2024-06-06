@@ -1,8 +1,8 @@
 package com.example.dev_j310_springapp.common.dto;
 
 public enum ClientType {
-    INDIVIDUAL("Юридическое лицо"),
-    LEGAL_ENTITY("Физическое лицо");
+    INDIVIDUAL("Физическое лицо"),
+    LEGAL("Юридическое лицо");
 
     private String type;
 

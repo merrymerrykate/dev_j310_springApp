@@ -8,7 +8,24 @@
 <body>
 <div align="center">
     <h1>Все клиенты</h1>
+    <form method="GET" th:action="@{/clients}">
+        <label for="clientName">Наименование клиента:</label>
+        <input type="text" id="clientName" name="clientname">
+
+        <label for="clientType">Тип клиента:</label>
+        <select id="clientType" name="clienttype">
+            <option value="">По любому типу</option>
+            <option value="Физическое лицо">INDIVIDUAL</option>
+            <option value="Юридическое лицо">LEGAL</option>
+        </select>
+
+        <label for="clientAddress">Местонахождение устройства:</label>
+        <input type="text" id="clientAddress" name="clientaddress">
+
+        <button type="submit">Фильтровать</button>
+    </form>
     <hr>
+    <a th:href="@{/clients/create}"><button>Create</button></a>
     <table border="1">
         <thead>
         <tr>
@@ -16,11 +33,12 @@
             <th>Наименование клиента</th>
             <th>Тип клиента</th>
             <th>Дата добавления</th>
-            <th>operation</th>
+            <th> </th>
             <th>IP</th>
             <th>Mac</th>
             <th>Модель устройства</th>
             <th>Местонахождения устройства</th>
+            <th> </th>
 
         </tr>
         </thead>
@@ -30,9 +48,23 @@
             <td th:text="${client.getClientName}"></td>
             <td th:text="${client.getType}"></td>
             <td th:text="${client.getAdded}"></td>
-            <td> <a th:href="@{/clients/{id}(id=${client.getClientid})}">open</a>
-                <a th:href="@{/clients/remove/{id}(id=${client.getClientid})}">remove</a></td>
+            <td>
+                <a th:href="@{/clients/{id}(id=${client.getClientid})}">open</a><br>
+                <a th:href="@{/clients/remove/{id}(id=${client.getClientid})}">remove client</a><br>
+                <a th:href="@{/addresses/create/{clientId}(clientId=${client.getClientid()})}">create address</a><br>
+                <a th:href="@{/client-address-update/update/{clientId}(clientId=${client.getClientid()})}">update client</a>
             </td>
+            <td th:text="${client.getIp}"></td>
+            <td th:text="${client.getMac}"></td>
+            <td th:text="${client.getModel}"></td>
+            <td th:text="${client.getAddress}"></td>
+            <td>
+            <a th:href="@{/client-address-update/update-address/{addressId}(addressId=${client.getAddressId()})}">update address</a><br>
+                <a th:href="@{/client-address-update/delete-address/{addressId}(addressId=${client.getAddressId})}">delete address</a><br>
+
+            </td>
+
+
         </tr>
         </tbody>
     </table>

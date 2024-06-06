@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 public interface CustomRepository {
 
     default  <T>Optional<T> findById(Class<T> clazz, Integer id){
-
         return Optional.of(getEm().find(clazz, id));
     }
 

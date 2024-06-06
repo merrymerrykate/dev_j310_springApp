@@ -1,6 +1,7 @@
 package com.example.dev_j310_springapp.repo.impl;
 
 import com.example.dev_j310_springapp.common.dto.AddressDto;
+import com.example.dev_j310_springapp.common.dto.ClientType;
 import com.example.dev_j310_springapp.common.entity.AddressEntity;
 import com.example.dev_j310_springapp.common.entity.ClientEntity;
 import com.example.dev_j310_springapp.exception.EAppException;
@@ -8,7 +9,12 @@ import com.example.dev_j310_springapp.repo.AddressRepository;
 import com.example.dev_j310_springapp.repo.CustomRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -43,30 +49,27 @@ public class AddressRepositoryImpl implements AddressRepository {
                 AddressEntity.class).getResultList().stream();
     }
 
+    @Override
+    public Stream<AddressEntity> findByAddress(String address, String type){
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<AddressEntity> cq = cb.createQuery(AddressEntity.class);
+        Root<AddressEntity> root = cq.from(AddressEntity.class);
+        Join<AddressEntity, ClientEntity> clientJoin = root.join("client");
+        if (type != null && !type.isEmpty()) {
+            cq.select(root).where(
+                    cb.and(
+                            cb.like(root.get("address"), "%" + address+"%"),
+                            cb.equal(clientJoin.get("type"), type)
+                    ));
+        } else
 
+    {
+        cq.select(root).where(
+                cb.like(root.get("address"), "%" + address + "%"));
+    }
+            return em.createQuery(cq).getResultList().stream();
+    }
 
-//    @Override
-//    public void update(AddressEntity addressEntity) throws EAppException {
-//       findAddressById(addressEntity.getId()).ifPresentOrElse(
-//               entity -> {
-//                    entity.setIp(addressEntity.getIp());
-//                    entity.setMac(addressEntity.getMac());
-//                    entity.setModel(addressEntity.getModel());
-//                    entity.setAddress(addressEntity.getAddress());
-//                    em.merge(entity);
-//                    em.flush();
-//               },
-//               () -> {
-//                   throw new EAppException(String.format("Объект с идентификатором '%d' не найден", addressEntity.getId()));
-//               }
-//
-//       );
-//    }
-//
-//    @Override
-//    public Optional<AddressEntity> create(AddressEntity addressEntity) {
-//        return Optional.empty();
-//    }
 
     @Override
     public EntityManager getEm() {

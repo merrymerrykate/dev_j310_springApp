@@ -13,7 +13,7 @@ public interface ClientService {
     Optional <ClientDto>findClientById(Integer id);
     void remove(Integer id) throws EAppException;
     void update(ClientDto clientDto) throws EAppException;
-    Optional <ClientDto> create(ClientDto clientDto);
+    Optional<ClientDto> create(ClientDto clientDto);
 
-    Stream<ClientDto> findByClientName(String clientname);
+    Stream<ClientDto> findByClientName(String clientname, String clientType);
 }

@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-@Service
+@Service(value="clientService")
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
@@ -36,20 +36,8 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.findById(ClientEntity.class, id).map(ClientServiceImpl::entityToDto);
     }
 
-
-    @Override
-    public void update(ClientDto clientDto) throws EAppException {
-            clientRepository.findById(ClientEntity.class, clientDto.getClientid()).ifPresentOrElse(
-                    entity -> {
-                        entity.setClientName(clientDto.getClientName());
-                        entity.setAdded(clientDto.getAdded());
-                        entity.setType(clientDto.getType().name());
-                        clientRepository.update(entity);
-                    },
-                    () -> {
-                        throw new EAppException(String.format("Объект с идентификатором '%d' не найден", clientDto.getClientid()));
-                    }
-            );
+   public void update(ClientDto clientDto) throws EAppException{
+        clientRepository.update(dtoToEntity(clientDto));
     }
 
     @Override
@@ -58,8 +46,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Stream<ClientDto> findByClientName(String clientname) {
-        return clientRepository.findByClientName(clientname).map(ClientServiceImpl::entityToDto);
+    public Stream<ClientDto> findByClientName(String clientname, String clientType) {
+        return clientRepository.findByClientName(clientname, clientType).map(ClientServiceImpl::entityToDto);
 
     }
 
@@ -81,19 +69,22 @@ public class ClientServiceImpl implements ClientService {
     }
 
     public static ClientDto entityToDto(ClientEntity entity){
-            return ClientDto.builder()
+            ClientDto cd = ClientDto.builder()
                     .clientid(entity.getClientId())
                     .clientName(entity.getClientName())
                     .type(ClientType.getClientType(entity.getType()))
                     .added(entity.getAdded())
                     .build();
+            return cd;
     }
 
     public static ClientEntity dtoToEntity(ClientDto dto){
         ClientEntity entity = new ClientEntity();
-        entity.setClientId(dto.getClientid());
+        if (dto.getClientid() != null) {
+            entity.setClientId(dto.getClientid());
+        }
         entity.setClientName(dto.getClientName());
-        entity.setAdded(dto.getAdded());
+            entity.setAdded(dto.getAdded());
         entity.setType(dto.getType().getType());
         return entity;
     }

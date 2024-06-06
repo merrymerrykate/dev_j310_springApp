@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -22,7 +23,7 @@ public class ClientEntity {
     @jakarta.persistence.Id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "clientid", nullable = false)
+    @Column(name = "clientid")
     private int clientId;
 
     @Column(name = "client_name",nullable = false, length = 100)
@@ -32,8 +33,7 @@ public class ClientEntity {
     private String type;
 
     @Column(name = "added", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date added;
+    private LocalDateTime added;
 
     @OneToMany(mappedBy = "client")
     private Set<AddressEntity> addressEntities = new LinkedHashSet<>();
